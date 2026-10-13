@@ -1,32 +1,25 @@
-# GT4 - MQTT HydroTank
+## Taller 5 - Persistencia en InfluxDB y Consultas Flux
 
-## Información del equipo
+### Ruta de Ingesta
+La arquitectura de ingesta de datos del proyecto sigue el flujo oficial del curso:
+`ESP32 -> Broker MQTT (Mosquitto) -> Agente de Ingesta (Telegraf) -> Base de Datos de Series Temporales (InfluxDB) -> Visualización y Consultas (Grafana Explore)`
 
-- **Equipo:** E31
-- **Proyecto:** P15 - Estanque de agua
-- **Nodo:** nodo1
+### Esquema de Datos del Equipo
+* **Organización:** `curso-iot`
+* **Bucket:** `mediciones`
+* **Measurement:** `mediciones`
 
-## Tópicos MQTT
+#### Tags Estructurales (Identidad):
+* `equipo`: `E31`
+* `proyecto`: `P15`
+* `nodo`: `nodo1`
+* `topic`: `curso/E31/P15/nodo1` (tag auxiliar)
 
-| Tópico | QoS | Retained | Descripción |
-|---|---:|---|---|
-| `curso/E31/P15/nodo1` | Por verificar | true | Datos principales calibrados del proyecto |
-| `curso/E31/P15/nodo1/estado` | Por verificar | true | Estado actual de la FSM |
-| `curso/E31/P15/nodo1/cmd` | Por verificar | false | Canal reservado para comandos |
-
-## Payload
-
-El nodo publica un payload JSON plano con los datos del proyecto.
-
-Ejemplo:
-
-```json
-{
-  "distancia": 131.6,
-  "caudal": 0,
-  "volumen_l": 0,
-  "objetivo_l": 0,
-  "estado": 0,
-  "sensor_ok": 1,
-  "rssi_dbm": -48
-}
+#### Fields del Proyecto:
+* `volumen_l`: Volumen medido en litros (Field principal).
+* `caudal`: Tasa de flujo/caudal medido.
+* `distancia`: Distancia medida por el sensor ultrasónico (cm).
+* `estado`: Estado del sistema.
+* `objetivo_l`: Volumen objetivo configurado.
+* `rssi_dbm`: Calidad de la señal de red (dBm).
+* `sensor_ok`: Indicador de operatividad del sensor.
