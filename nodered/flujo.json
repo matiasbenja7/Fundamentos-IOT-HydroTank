@@ -1,0 +1,147 @@
+{
+  "id": "gt6-hydrotank-e31",
+  "label": "GT6 HydroTank E31",
+  "nodes": [
+    {
+      "id": "mqtt-in-hydrotank",
+      "type": "mqtt in",
+      "z": "gt6-hydrotank-e31",
+      "name": "Leer telemetría E31",
+      "topic": "curso/E31/P15/nodo1",
+      "qos": "1",
+      "datatype": "auto-detect",
+      "broker": "BROKER_CURSO_EXISTENTE",
+      "nl": false,
+      "rap": true,
+      "inputs": 0,
+      "x": 220,
+      "y": 140,
+      "wires": [
+        [
+          "json-hydrotank"
+        ]
+      ]
+    },
+    {
+      "id": "json-hydrotank",
+      "type": "json",
+      "z": "gt6-hydrotank-e31",
+      "name": "Interpretar JSON",
+      "property": "payload",
+      "action": "",
+      "pretty": false,
+      "propertyType": "msg",
+      "x": 430,
+      "y": 140,
+      "wires": [
+        [
+          "debug-hydrotank"
+        ]
+      ]
+    },
+    {
+      "id": "debug-hydrotank",
+      "type": "debug",
+      "z": "gt6-hydrotank-e31",
+      "name": "Ver telemetría",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "complete": "payload",
+      "targetType": "msg",
+      "x": 650,
+      "y": 140,
+      "wires": []
+    },
+    {
+      "id": "inject-on-hydrotank",
+      "type": "inject",
+      "z": "gt6-hydrotank-e31",
+      "name": "Enviar ON",
+      "props": [
+        {
+          "p": "payload"
+        }
+      ],
+      "repeat": "",
+      "crontab": "",
+      "once": false,
+      "onceDelay": 0.1,
+      "topic": "",
+      "payload": "ON",
+      "payloadType": "str",
+      "x": 200,
+      "y": 260,
+      "wires": [
+        [
+          "function-cmd-hydrotank"
+        ]
+      ]
+    },
+    {
+      "id": "inject-off-hydrotank",
+      "type": "inject",
+      "z": "gt6-hydrotank-e31",
+      "name": "Enviar OFF",
+      "props": [
+        {
+          "p": "payload"
+        }
+      ],
+      "repeat": "",
+      "crontab": "",
+      "once": false,
+      "onceDelay": 0.1,
+      "topic": "",
+      "payload": "OFF",
+      "payloadType": "str",
+      "x": 200,
+      "y": 320,
+      "wires": [
+        [
+          "function-cmd-hydrotank"
+        ]
+      ]
+    },
+    {
+      "id": "function-cmd-hydrotank",
+      "type": "function",
+      "z": "gt6-hydrotank-e31",
+      "name": "Validar y formar comando",
+      "func": "const accion = String(msg.payload || \"\").trim();\nif (accion !== \"ON\" && accion !== \"OFF\") return null;\nmsg.payload = { cmd: accion };\nreturn msg;",
+      "outputs": 1,
+      "timeout": 0,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 450,
+      "y": 290,
+      "wires": [
+        [
+          "mqtt-out-hydrotank"
+        ]
+      ]
+    },
+    {
+      "id": "mqtt-out-hydrotank",
+      "type": "mqtt out",
+      "z": "gt6-hydrotank-e31",
+      "name": "Publicar en /cmd",
+      "topic": "curso/E31/P15/nodo1/cmd",
+      "qos": "1",
+      "retain": "false",
+      "broker": "BROKER_CURSO_EXISTENTE",
+      "x": 700,
+      "y": 290,
+      "wires": []
+    },
+    {
+      "id": "gt6-hydrotank-e31",
+      "type": "tab",
+      "label": "GT6 HydroTank E31",
+      "disabled": false,
+      "info": "GT6: lectura MQTT y comandos ON/OFF al tópico propio /cmd. Antes de desplegar, seleccionar la conexión MQTT del curso ya configurada; no crear un broker nuevo. Según la guía, comandos de la GT6 accionan solo un indicador no crítico."
+    }
+  ]
+}
