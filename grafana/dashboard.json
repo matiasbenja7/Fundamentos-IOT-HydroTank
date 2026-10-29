@@ -73,7 +73,7 @@
       "id": 2,
       "type": "stat",
       "title": "Volumen actual",
-      "description": "Último volumen registrado; rojo desde el umbral definido para el proyecto.",
+      "description": "Último volumen registrado. Al importar, configurar el threshold rojo con el umbral real acordado en el charter/FSM; no usar un valor de ejemplo.",
       "datasource": {
         "type": "influxdb",
         "uid": "${DS_INFLUXDB}"
@@ -93,10 +93,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 0.3
               }
             ]
           },
